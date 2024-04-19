@@ -1,4 +1,4 @@
-![](logo.png)
+![instauto](logo.png)
 
 [![Discord](https://img.shields.io/discord/986052713425027072)](https://discord.gg/Rh3KT9zyhj) [![PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/mifino/usd)
 

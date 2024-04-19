@@ -19,12 +19,12 @@
   "dependencies": {
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.10",
-    "user-agents": "^1.0.559"
+    "puppeteer": "^22.6.5",
+    "user-agents": "^1.1.178"
   },
   "devDependencies": {
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.25.2",
-    "puppeteer": "^1.19.0"
+    "eslint-plugin-import": "^2.25.2"
   }
 }

@@ -84,6 +84,12 @@ const options = {
         // Needed for docker
         '--no-sandbox',
         '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process',
+        '--disable-gpu',
 
         // If you need to proxy: (see also https://www.chromium.org/developers/design-documents/network-settings)
         // '--proxy-server=127.0.0.1:9876',
