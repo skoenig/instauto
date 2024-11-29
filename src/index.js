@@ -578,7 +578,7 @@ const Instauto = async (db, browser, options) => {
 
   /* eslint-disable no-undef */
   async function likeCurrentUserImagesPageCode({ dryRun: dryRunIn, likeImagesMin, likeImagesMax, shouldLikeMedia: shouldLikeMediaIn }) {
-    const allImages = Array.from(document.getElementsByTagName('a')).filter(el => /instagram.com\/p\//.test(el.href));
+    const allImages = Array.from(document.getElementsByTagName('a')).filter(el => /\/p\//.test(el.href));
 
     // eslint-disable-next-line no-shadow
     function shuffleArray(arrayIn) {
