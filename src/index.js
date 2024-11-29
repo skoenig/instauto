@@ -150,8 +150,11 @@ const Instauto = async (db, browser, options) => {
   }
 
   async function checkReachedFollowedUserDayLimit() {
-    if (getNumFollowedUsersThisTimeUnit(dayMs) >= maxFollowsPerDay) {
-      logger.log('Have reached daily follow/unfollow limit, waiting 10 min');
+    const currentFollowCount = getNumFollowedUsersThisTimeUnit(dayMs);
+    logger.log(`Followed ${currentFollowCount}/${maxFollowsPerDay} daily users`);
+
+    if (currentFollowCount >= maxFollowsPerDay) {
+      logger.log('Have reached daily follow/unfollow limit, pausing 10 min');
       await sleep(10 * 60 * 1000);
     }
   }
@@ -164,7 +167,10 @@ const Instauto = async (db, browser, options) => {
   }
 
   async function checkReachedLikedUserDayLimit() {
-    if (getNumLikesThisTimeUnit(dayMs) >= maxLikesPerDay) {
+    const currentLikesCount = getNumLikesThisTimeUnit(dayMs);
+    logger.log(`Liked ${currentLikesCount}/${maxLikesPerDay} daily pictures`);
+
+    if (currentLikesCount >= maxLikesPerDay) {
       logger.log('Have reached daily like rate limit, pausing 10 min');
       await sleep(10 * 60 * 1000);
     }
@@ -784,7 +790,10 @@ const Instauto = async (db, browser, options) => {
 
           let didActuallyFollow = false;
           if (enableFollow) didActuallyFollow = await followUserRespectingRestrictions({ username: follower, skipPrivate });
-          if (didActuallyFollow) numFollowedForThisUser += 1;
+          if (didActuallyFollow) {
+            numFollowedForThisUser += 1;
+            logger.log(`Followed ${numFollowedForThisUser}/${maxFollowsPerUser} users for ${username}`);
+          }
 
           const didFailToFollow = enableFollow && !didActuallyFollow;
 
@@ -856,7 +865,7 @@ const Instauto = async (db, browser, options) => {
                 j += 1;
 
                 if (j % 10 === 0) {
-                  logger.log('Have unfollowed 10 users since last break. Taking a break');
+                  logger.log('Have unfollowed 10 users since last break, pausing 10 min');
                   await sleep(10 * 60 * 1000, 0.1);
                 }
               }
