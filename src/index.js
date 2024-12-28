@@ -26,9 +26,15 @@ function escapeXpathStr(str) {
 }
 
 const botWorkShiftHours = 16;
-
 const dayMs = 24 * 60 * 60 * 1000;
 const hourMs = 60 * 60 * 1000;
+
+class DailyLimitReachedError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'DailyLimitReachedError';
+  }
+}
 
 const Instauto = async (db, browser, options) => {
   const {
@@ -154,8 +160,7 @@ const Instauto = async (db, browser, options) => {
     logger.log(`Followed ${currentFollowCount}/${maxFollowsPerDay} daily users`);
 
     if (currentFollowCount >= maxFollowsPerDay) {
-      logger.log('Have reached daily follow/unfollow limit, pausing 10 min');
-      await sleep(10 * 60 * 1000);
+      throw new DailyLimitReachedError(`Daily follow limit reached: ${currentFollowCount}/${maxFollowsPerDay}`);
     }
   }
 
@@ -171,8 +176,7 @@ const Instauto = async (db, browser, options) => {
     logger.log(`Liked ${currentLikesCount}/${maxLikesPerDay} daily pictures`);
 
     if (currentLikesCount >= maxLikesPerDay) {
-      logger.log('Have reached daily like rate limit, pausing 10 min');
-      await sleep(10 * 60 * 1000);
+      throw new DailyLimitReachedError(`Daily like limit reached: ${currentLikesCount}/${maxLikesPerDay}`);
     }
   }
 
@@ -828,6 +832,10 @@ const Instauto = async (db, browser, options) => {
         await sleep(10 * 60 * 1000);
         await throttle();
       } catch (err) {
+        if (err.name === 'DailyLimitReachedError') {
+          logger.log('Daily limit reached, stopping:', err.message);
+          return; // Exit the loop cleanly
+        }
         logger.error('Failed to process user followers, continuing', username, err);
         await takeScreenshot();
         await sleep(60 * 1000);
