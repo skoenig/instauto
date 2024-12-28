@@ -88,7 +88,9 @@ const options = {
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--single-process',
+        // commented out to fix 'Navigating frame was detached' bug
+        // see: https://github.com/puppeteer/puppeteer/issues/11515#issuecomment-2364155101
+        // '--single-process',
         '--disable-gpu',
 
         // If you need to proxy: (see also https://www.chromium.org/developers/design-documents/network-settings)
